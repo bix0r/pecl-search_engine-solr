@@ -128,22 +128,25 @@ PHP_METHOD(SolrQuery, setStart)
 {
 	solr_char_t *param_name = (solr_char_t *) "start";
 	COMPAT_ARG_SIZE_T param_name_len = sizeof("start")-1;
-	zend_string *start_value_str = NULL;
-	zend_long start_value_long = 0;
-	char param_value[11];
-	COMPAT_ARG_SIZE_T param_value_len = 0;
+	zend_string *param_value = NULL;
+	zend_long param_value_long = 0;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_STR_OR_LONG(start_value_str, start_value_long)
+		Z_PARAM_STR_OR_LONG(param_value, param_value_long)
 	ZEND_PARSE_PARAMETERS_END();
 
-	if (start_value_str != NULL) {
-		start_value_long = atol(start_value_str->val);
+	if (param_value == NULL) {
+		param_value = strpprintf(11, "%ld", param_value_long);
 	}
 
-	param_value_len = snprintf(param_value, sizeof(param_value), "%ld", start_value_long);
+	if (param_value == NULL) {
 
-	if (solr_set_normal_param(getThis(), param_name, param_name_len, param_value, param_value_len) == FAILURE)
+		php_error_docref(NULL, E_WARNING, "Invalid parameters");
+
+		RETURN_NULL();
+	}
+
+	if (solr_set_normal_param(getThis(), param_name, param_name_len, ZSTR_VAL(param_value), ZSTR_LEN(param_value)) == FAILURE)
 	{
 		RETURN_NULL();
 	}
@@ -158,22 +161,25 @@ PHP_METHOD(SolrQuery, setRows)
 {
 	solr_char_t *param_name = (solr_char_t *) "rows";
 	COMPAT_ARG_SIZE_T param_name_len = sizeof("rows")-1;
-	zend_string *rows_value_str = NULL;
-	zend_long rows_value_long = 0;
-	char param_value[11];
-	COMPAT_ARG_SIZE_T param_value_len = 0;
+	zend_string *param_value = NULL;
+	zend_long param_value_long = 0;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_STR_OR_LONG(rows_value_str, rows_value_long)
+		Z_PARAM_STR_OR_LONG(param_value, param_value_long)
 	ZEND_PARSE_PARAMETERS_END();
 
-	if (rows_value_str == NULL) {
-		rows_value_str = atol(ZSTR_VAL(rows_value_str));
+	if (param_value == NULL) {
+		param_value = strpprintf(11, "%ld", param_value_long);
 	}
 
-	param_value_len = snprintf(param_value, sizeof(param_value), "%ld", rows_value_long);
+	if (param_value == NULL) {
 
-	if (solr_set_normal_param(getThis(), param_name, param_name_len, param_value, param_value_len) == FAILURE)
+		php_error_docref(NULL, E_WARNING, "Invalid parameters");
+
+		RETURN_NULL();
+	}
+
+	if (solr_set_normal_param(getThis(), param_name, param_name_len, ZSTR_VAL(param_value), ZSTR_LEN(param_value)) == FAILURE)
 	{
 		RETURN_NULL();
 	}
@@ -334,25 +340,27 @@ PHP_METHOD(SolrQuery, setTimeAllowed)
 {
 	solr_char_t *param_name = (solr_char_t *) "timeAllowed";
 	COMPAT_ARG_SIZE_T param_name_len = sizeof("timeAllowed")-1;
-	// Even though this could be a 64bit Long, allowing 24 days (32bits) is probably enough
-	zend_long ms_value_long = 0;
-	zend_string *ms_value_str = NULL;
-	char param_value[11];
-	COMPAT_ARG_SIZE_T param_value_len = 0;
+	zend_string *param_value = NULL;
+	zend_long param_value_long = 0;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_STR_OR_LONG(ms_value_str, ms_value_long)
+		Z_PARAM_STR_OR_LONG(param_value, param_value_long)
 	ZEND_PARSE_PARAMETERS_END();
 
-	if (ms_value_str != NULL) {
-		ms_value_long = atol(ms_value_str->val);
+	if (param_value == NULL) {
+		param_value = strpprintf(11, "%ld", param_value_long);
 	}
 
-	param_value_len = snprintf(param_value, sizeof(param_value), "%ld", ms_value_long);
+	if (param_value == NULL) {
 
-	if (solr_set_normal_param(getThis(), param_name, param_name_len, param_value, param_value_len) == FAILURE)
+		php_error_docref(NULL, E_WARNING, "Invalid parameters");
+
+		RETURN_NULL();
+	}
+
+	if (solr_set_normal_param(getThis(), param_name, param_name_len, ZSTR_VAL(param_value), ZSTR_LEN(param_value)) == FAILURE)
 	{
-		php_error_docref(NULL, E_WARNING, "Error setting parameter %s=%s ", param_name, param_value);
+		php_error_docref(NULL, E_WARNING, "Error setting parameter %s=%s ", param_name, ZSTR_VAL(param_value));
 
 		RETURN_NULL();
 	}
@@ -1357,24 +1365,27 @@ PHP_METHOD(SolrQuery, setGroupOffset)
 
 	solr_char_t *param_name = (solr_char_t *) "group.offset";
 	int param_name_len = sizeof("group.offset")-1;
-	zend_string * offset_value_str = NULL;
-	zend_long offset_value_long = 0;
-	char param_value[11];
-	COMPAT_ARG_SIZE_T  param_value_len = 0;
+	zend_string *param_value = NULL;
+	zend_long param_value_long = 0;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_STR_OR_LONG(offset_value_str, offset_value_long)
+		Z_PARAM_STR_OR_LONG(param_value, param_value_long)
 	ZEND_PARSE_PARAMETERS_END();
 
-	if (offset_value_str != NULL) {
-		offset_value_long = atol(offset_value_str->val);
+	if (param_value == NULL) {
+		param_value = strpprintf(11, "%ld", param_value_long);
 	}
 
-	param_value_len = snprintf(param_value, sizeof(param_value), "%ld", offset_value_long);
+	if (param_value == NULL) {
 
-	if (solr_add_normal_param(getThis(), param_name, param_name_len, param_value, param_value_len) == FAILURE)
+		php_error_docref(NULL, E_WARNING, "Invalid parameters");
+
+		RETURN_NULL();
+	}
+
+	if (solr_add_normal_param(getThis(), param_name, param_name_len, ZSTR_VAL(param_value), ZSTR_LEN(param_value)) == FAILURE)
 	{
-		php_error_docref(NULL, E_WARNING, "Unable to add param value %s to %s ", param_value, param_name);
+		php_error_docref(NULL, E_WARNING, "Unable to add param value %s to %s ", ZSTR_VAL(param_value), param_name);
 
 		RETURN_NULL();
 	}
@@ -1936,22 +1947,25 @@ PHP_METHOD(SolrQuery, setExpandRows)
 {
     solr_char_t *param_name = (solr_char_t *) "expand.rows";
     COMPAT_ARG_SIZE_T param_name_len = sizeof("expand.rows")-1;
-	zend_string *rows_value_str = NULL;
-    zend_long rows_value_long = 0;
-    char param_value[11];
-    COMPAT_ARG_SIZE_T  param_value_len = 0;
+    zend_string *param_value = NULL;
+    zend_long param_value_long = 0;
 
-	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_STR_OR_LONG(rows_value_str, rows_value_long)
-	ZEND_PARSE_PARAMETERS_END();
+    ZEND_PARSE_PARAMETERS_START(1, 1)
+        Z_PARAM_STR_OR_LONG(param_value, param_value_long)
+    ZEND_PARSE_PARAMETERS_END();
 
-	if (rows_value_str != NULL) {
-		rows_value_long = atol(rows_value_str->val);
-	}
+    if (param_value == NULL) {
+        param_value = strpprintf(11, "%ld", param_value_long);
+    }
 
-    param_value_len = snprintf(param_value, sizeof(param_value), "%ld", rows_value_long);
+    if (param_value == NULL) {
 
-    if (solr_set_normal_param(getThis(), param_name, param_name_len, param_value, param_value_len) == FAILURE)
+        php_error_docref(NULL, E_WARNING, "Invalid parameters");
+
+        RETURN_NULL();
+    }
+
+    if (solr_set_normal_param(getThis(), param_name, param_name_len, ZSTR_VAL(param_value), ZSTR_LEN(param_value)) == FAILURE)
     {
         RETURN_NULL();
     }
